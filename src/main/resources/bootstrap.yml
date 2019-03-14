@@ -29,5 +29,13 @@ spring:
                 enabled: true
                 service-id: CONFIG
             profile: dev
+# 禁用过滤器 : 语法 zuul.<SimpleClassName>.<filterType>.disable=true
+# 参考：https://www.jianshu.com/p/0a8013c5b66c
+zuul:
+  TokenFilter:
+    pre:
+      disable: true
+
+
 
 
