@@ -1,0 +1,32 @@
+# 服务器配置
+server:
+    port: 8088
+# 网关服务端
+# eureka server的端口不用默认值的话（8761），
+# 则eureka客户端配置需放在本地，不然连接不上注册中心，从而获取不到配置中心的配置
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8762/eureka/
+    instance:
+        # IP
+        hostname: localhost
+        instance-id: ${spring.application.name}:@project.version@
+# 这里的配置直接从配置中心获取
+# 配置中心地址如下：
+# http://localhost:8083/api-gateway-dev.yml
+# service-id: CONFIG配置指向->localhost:8083,也就是配置中心服务
+# name: api-gateway指向->api-gateway, 也就是当前应用名称，配置中心中配置文件名(文件名和这个name必须一致，不然获取不到配置)
+# profile: dev指向->dev, 开发环境
+# 已上信息就可以拼接一个完整的配置文件地址
+# 此配置文件更名为bootstrap，可以百度下spring-cloud:bootstrap
+spring:
+    application:
+        name: api-gateway
+    cloud:
+        config:
+            discovery:
+                enabled: true
+                service-id: CONFIG
+            profile: dev
+
