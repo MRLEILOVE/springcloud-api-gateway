@@ -38,6 +38,12 @@
             <artifactId>spring-cloud-config-client</artifactId>
         </dependency>
 
+        <!--spring-cloud-bus, 基于rabbitMQ, 动态刷新配置-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
