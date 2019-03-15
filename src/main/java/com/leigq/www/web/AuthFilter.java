@@ -1,14 +1,22 @@
 package com.leigq.www.web;
 
+import com.leigq.www.constant.CookieConstant;
+import com.leigq.www.constant.RedisConstant;
+import com.leigq.www.util.CookieUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * 权限过滤器
@@ -23,6 +31,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 public class AuthFilter extends ZuulFilter {
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
     @Override
     public String filterType() {
         // 过滤器类型,前置类型
@@ -53,10 +65,24 @@ public class AuthFilter extends ZuulFilter {
         final RequestContext currentContext = RequestContext.getCurrentContext();
         final HttpServletRequest request = currentContext.getRequest();
 
-        /**
-         *
-         */
+        // 拦截路径
+        final String uri = request.getRequestURI();
+        final String url = request.getRequestURL().toString();
 
+        System.out.println(uri);
+        System.out.println(url);
+
+        if (uri.startsWith("/commodity/commodities/")) {
+            // 从Cookie拿
+            final Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+            if (Objects.isNull(cookie)
+                    || StringUtils.isBlank(cookie.getValue())
+                    || StringUtils.isBlank(stringRedisTemplate.opsForValue()
+                    .get(String.format(RedisConstant.USER_KEY, cookie.getValue())))) {
+                currentContext.setSendZuulResponse(false);
+                currentContext.setResponseStatusCode(HttpStatus.UNAUTHORIZED.value());
+            }
+        }
         return null;
     }
 }

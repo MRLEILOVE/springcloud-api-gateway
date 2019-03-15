@@ -49,6 +49,19 @@
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
 
+        <!--Redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <!-- sb2.x后，这个从 spring-boot-starter-redis 改成下面的-->
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- spring2.0集成redis所需common-pool2，缺少了会报错 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.leigq.common</groupId>
             <artifactId>springboot-common</artifactId>
