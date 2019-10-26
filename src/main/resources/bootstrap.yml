@@ -1,3 +1,4 @@
+# 网关使用：https://www.cnblogs.com/ityouknow/p/6944096.html
 # 服务器配置
 server:
     port: 8088
